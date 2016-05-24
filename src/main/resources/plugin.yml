@@ -1,0 +1,5 @@
+name: ArduinoIntegration
+main: de.neosit.minecraft.arduinointegration.Main
+version: '1'
+author: the
+description: Integrate an Arduino to Minecraft
