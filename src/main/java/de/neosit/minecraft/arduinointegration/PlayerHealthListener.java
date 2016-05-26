@@ -2,8 +2,10 @@ package de.neosit.minecraft.arduinointegration;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,85 +13,133 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
 /**
- * Set health for the first player
+ * Diese Klasse beschäftigt sich mit der Ausgabe der Lebensbalken an den
+ * Arduino.
  * 
- * @author Tobias
  */
 public class PlayerHealthListener implements Listener {
+	private Logger log;
 
+	// Serielle Schnittstelle für den Arduino
 	private SerialInterface serialInterface;
-	private Configuration config;
-	private Player firstPlayer = null;
+	private Player activePlayer = null;
 
-	public PlayerHealthListener(SerialInterface serialInterface, Configuration config) {
+	/**
+	 * Laden der seriellen Schnittstelle und der Konfiguration.
+	 * 
+	 * @param serialInterface
+	 * @param config
+	 */
+	public PlayerHealthListener(SerialInterface serialInterface, Logger log) {
 		this.serialInterface = serialInterface;
-		this.config = config;
+		this.log = log;
+	}
+	
+	/**
+	 * Diese Methode reagiert auf Änderungen des Lebens eines Spielers.
+	 * Sie wird aktiviert, sobald der Spieler geheilt wird.
+	 */
+	@EventHandler
+	public void onHeal(EntityRegainHealthEvent event) {
+		if (!(event.getEntity() instanceof Player)) {
+			return;
+		}
+		Player player = (Player) event.getEntity();
+		if (player == activePlayer) {
+			displayPlayerHealth(player);
+		}
 	}
 
+	/**
+	 * Diese Methode reagiert auf Änderungen des Lebens eines Spielers.
+	 * Sie wird aktiviert, sobald der Spieler schaden nimmt.
+	 */
+	@EventHandler
+	public void onDamage(EntityDamageEvent event) {
+		if (!(event.getEntity() instanceof Player)) {
+			return;
+		}
+		Player player = (Player) event.getEntity();
+		if (player == activePlayer) {
+			displayPlayerHealth(player);
+		}
+	}
+
+	/**
+	 * Diese Methode wird aufgerufen, sobald ein Spieler den Server betritt.
+	 * 
+	 * @param event
+	 */
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
+		// Liste der Spieler auf dem Server
 		Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
-		if (players.size() == 1 || firstPlayer == null) {
-			firstPlayer = players.iterator().next();
-			displayPlayerHealth(firstPlayer);
+		// Wenn der erste/einzige Spieler sich verbindet
+		if (players.size() == 1 || activePlayer == null) {
+			// Ersten Spieler aus der Liste aller Spieler auswählen
+			activePlayer = players.iterator().next();
+			log.info("Arduino reagiert nun auf Spieler " + activePlayer.getDisplayName());
+			activePlayer.sendMessage(ChatColor.AQUA +"[Arduino2Minecraft]" + ChatColor.WHITE +" Der Arduino reagiert nun auf dich!");
+			displayPlayerHealth(activePlayer);
 		}
 	}
-	
+
+	/**
+	 * Diese Methode wird aufgerufen, sobald ein Spieler den Server verlässt.
+	 * 
+	 * @param event
+	 */
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
-		if (event.getPlayer() == firstPlayer) {
+		if (event.getPlayer() == activePlayer) {
+			// Liste aller Spieler auf dem Server
 			Collection<? extends Player> players = Bukkit.getServer().getOnlinePlayers();
+			// Wenn noch weitere Spieler online sind
 			if (players.size() > 1) {
-				
+
 				Iterator<? extends Player> iterator = players.iterator();
 				Player player = null;
-				
-				// find next non leaving player
-				while(player == null) {
+
+				// Lade den nächsten Spieler, der noch online ist
+				while (player == null) {
 					Player p = iterator.next();
-					if (p != firstPlayer) {
+					if (p != activePlayer) {
 						player = p;
+						p.sendMessage(ChatColor.AQUA +"[Arduino2Minecraft]" + ChatColor.WHITE +" Der Arduino reagiert nun auf dich!");
+						log.info("Arduino reagiert nun auf Spieler " + p.getDisplayName());
 					}
 				}
-				
-				firstPlayer = player;
+
+				activePlayer = player;
 				displayPlayerHealth(player);
-				serialInterface.sendData("player " + player.getName());
 			} else {
-				firstPlayer = null;
+				activePlayer = null;
 				displayPlayerHealth(null);
-				serialInterface.sendData("no players");
 			}
 		}
 	}
-	
-	public void registerSchedule(JavaPlugin plugin) {
-		Runnable r = new Runnable() {
-			
-			public void run() {
-				if (null == firstPlayer) {
-					return;
-				}
-				
-				displayPlayerHealth(firstPlayer);
-			}
-		};
-		
-		BukkitScheduler scheduler = Bukkit.getScheduler();
-		scheduler.scheduleSyncRepeatingTask(plugin, r, 0, config.getHealthbarPeriod());
-	}
-	
+
+	/**
+	 * Diese Methode sendet das Signal mit dem Leben des Spielers an den
+	 * Arduino. Die 10 Minecraft Herzen werden auf 5 LEDs aufgeteilt, sodass
+	 * eine LED gleich 2 Leben sind
+	 * 
+	 * @param player
+	 *            Der Spieler, dessen Leben angezeigt werden soll.
+	 */
 	public void displayPlayerHealth(Player player) {
+		// Wenn kein Spieler vorhanden ist, sende life 0 an den Arduino
 		if (null == player) {
 			serialInterface.sendData("life 0");
 		} else {
+			// Teile das Leben des Spielers, durch die max Lebensanzahl
+			// Erzeugt einen Wert zwischen 1 (10 Herzen) und 0 (0 Herzen)
 			double life = player.getHealth() / player.getMaxHealth();
-			
+
+			// Dieser Teil überprüft, wie viele Herzen der Spieler besitzt
+			// und sendet abhängig davon einen Text an den Arduino.
 			if (life >= 0.8) {
 				serialInterface.sendData("life 5");
 			} else if (life >= 0.6) {
@@ -103,7 +153,7 @@ public class PlayerHealthListener implements Listener {
 			} else {
 				serialInterface.sendData("life 0");
 			}
-			
+
 		}
 	}
 }

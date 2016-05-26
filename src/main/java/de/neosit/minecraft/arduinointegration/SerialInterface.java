@@ -6,8 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.TooManyListenersException;
-
-import org.bukkit.Bukkit;
+import java.util.logging.Logger;
 
 import gnu.io.CommPortIdentifier;
 import gnu.io.PortInUseException;
@@ -15,17 +14,21 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 
+/**
+ * Diese Klasse empfängt und sendet Befehle an den Arduino.
+ *
+ */
 public class SerialInterface {
-
-	private CommandInterface command;
+	private Logger log;
+	private CommandDispatcher command;
 	
-	public SerialInterface(CommandInterface command) {
+	public SerialInterface(CommandDispatcher command, Logger log) {
 		this.command = command;
+		this.log = log;
 	}
 
 	public void findPort() {
-		CommPortIdentifier portId = null;
-		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+		Enumeration<?> portEnum = CommPortIdentifier.getPortIdentifiers();
 		while (portEnum.hasMoreElements()) {
 			System.out.println(portEnum.nextElement());
 		}
@@ -35,12 +38,9 @@ public class SerialInterface {
 	public BufferedReader input2 = null;
 	
 	private static final int TIME_OUT = 1000; // Port open timeout
-	private static final int DATA_RATE = 9600; // Arduino serial port
 	
-	public void a() throws TooManyListenersException, PortInUseException {
+	public void connectToArduino() throws TooManyListenersException, PortInUseException {
 		String appName = null;
-		BufferedReader input;
-		OutputStream output;
 
 		String PORT_NAMES[] = { "/dev/tty.usbmodem", // Mac OS X
         "/dev/usbdev", // Linux
@@ -50,16 +50,15 @@ public class SerialInterface {
 		};
 
 		CommPortIdentifier portId = null;
-		Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
+		Enumeration<?> portEnum = CommPortIdentifier.getPortIdentifiers();
 
 		// Enumerate system ports and try connecting to Arduino over each
-		//
-		System.out.println("Trying:");
+		log.info("Versuche Verbindung zum Arduino herzustellen...");
 		while (portId == null && portEnum.hasMoreElements()) {
 			// Iterate through your host computer's serial port IDs
 			//
 			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-			System.out.println("   port" + currPortId.getName());
+			log.info("Versuche device " + currPortId.getName());
 			for (String portName : PORT_NAMES) {
 				if (currPortId.getName().equals(portName) || currPortId.getName().startsWith(portName)) {
 
@@ -68,14 +67,14 @@ public class SerialInterface {
 					// Open serial port
 					serialPort = (SerialPort) currPortId.open(appName, TIME_OUT);
 					portId = currPortId;
-					System.out.println("Connected on port" + currPortId.getName());
+					log.info("Verbindung zum Arduino hergestellt auf Port " + currPortId.getName());
 					break;
 				}
 			}
 		}
 
 		if (portId == null || serialPort == null) {
-			System.out.println("Oops... Could not connect to Arduino");
+			log.warning("Verbindung zum Arduino fehlgeschlagen!");
 		}
 
 		serialPort.addEventListener(new SerialPortEventListener() {
@@ -95,7 +94,7 @@ public class SerialInterface {
 						break;
 					}
 				} catch (Exception e) {
-					System.err.println(e.toString());
+					log.warning(e.toString());
 				}
 
 			}
@@ -108,9 +107,10 @@ public class SerialInterface {
 			s = s + "\n";
 			OutputStream output = serialPort.getOutputStream();
 			output.write(s.getBytes());
+			log.info("Sende folgende Daten an den Arduino " + s);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warning(e.getMessage());
 		}
 	}
 	

@@ -4,6 +4,11 @@ import java.util.Arrays;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
+/**
+ * Konfigurationsklasse.
+ * Stellt Zugriff auf die Konfigurationsdatei sicher.
+ *
+ */
 public class Configuration {
 	public static final String PORT = "port";
 	public static final String TIMEOUT = "timeout";
@@ -39,6 +44,13 @@ public class Configuration {
 		return (int) config.getInt(DATA_RATE);
 	}
 	
+	/**
+	 * Gibt den Befehl zurück, der zu einem bestimmten 
+	 * Element in der Konfigurationsdatei hinterlegt ist.
+	 * 
+	 * @param arduinoValue Ist der Wert, der direkt vom Arduino gesendet wird.
+	 * @return Gibt den Befehl zurück, der in der Konfiguration hinterlegt ist.
+	 */
 	public String getCommandForArduinoValue(String arduinoValue) {
 		String key = ARDUINO_PREFIX + arduinoValue;
 		return (String) config.getString(key);

@@ -1,56 +1,54 @@
 package de.neosit.minecraft.arduinointegration;
 
 import java.util.TooManyListenersException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.bukkit.command.Command;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import gnu.io.PortInUseException;
-
+/**
+ * Hauptklasse zur Initialisierung des Plugin und dem Beenden des Plugin.
+ *
+ */
 public class Main extends JavaPlugin {
-	private Logger log;
+	private Logger log = getLogger();
 
 	private SerialInterface serial;
 	
 	@Override
 	public void onEnable() {
-		log = getLogger();
 		
+		//Konfiguration des Plugin laden
 		Configuration config = new Configuration(getConfig());
 		config.setDefaults();
 		saveConfig();
 		
-		CommandInterface command = new CommandInterface(config);
+		
+		CommandDispatcher command = new CommandDispatcher(config, getLogger());
 		command.register(this);
 		
-		serial = new SerialInterface(command);
-		
+		serial = new SerialInterface(command, getLogger());
 		
 		try {
-			serial.a();
+			serial.connectToArduino();
 		} catch (TooManyListenersException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warning(e.getMessage());
 		} catch (PortInUseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warning(e.getMessage());
 		}
 		
 		PluginManager pluginManager = getServer().getPluginManager();
 		
-		PlayerHealthListener playerHealthListener = new PlayerHealthListener(serial, config);
-		playerHealthListener.registerSchedule(this);
+		PlayerHealthListener playerHealthListener = new PlayerHealthListener(serial, getLogger());
 		pluginManager.registerEvents(playerHealthListener, this);
 		
-		log.log(Level.INFO, "is enabled!");	
+		log.info("Plugin aktiviert!");	
 	}
 
 	@Override
 	public void onDisable() {
 		serial.closeConnection();
-		log.log(Level.INFO, "is disabled!");
+		log.info("Plugin deaktiviert!");
 	}
 }
