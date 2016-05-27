@@ -1,0 +1,7 @@
+port:
+- COM3
+timeout: 1000
+data_rate: 9600
+period: 4
+healthbar_period: 5
+arduino_knopf1: kick Player1
