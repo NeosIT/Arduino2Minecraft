@@ -28,7 +28,7 @@ public class Main extends JavaPlugin {
 		CommandDispatcher command = new CommandDispatcher(config, getLogger());
 		command.register(this);
 		
-		serial = new SerialInterface(command, getLogger());
+		serial = new SerialInterface(command, getLogger(), config.getPorts());
 		
 		try {
 			serial.connectToArduino();

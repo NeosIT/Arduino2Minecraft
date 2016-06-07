@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.TooManyListenersException;
 import java.util.logging.Logger;
 
@@ -21,10 +22,12 @@ import gnu.io.SerialPortEventListener;
 public class SerialInterface {
 	private Logger log;
 	private CommandDispatcher command;
+	private List<String> ports;
 	
-	public SerialInterface(CommandDispatcher command, Logger log) {
+	public SerialInterface(CommandDispatcher command, Logger log, List<String> ports) {
 		this.command = command;
 		this.log = log;
+		this.ports = ports;
 	}
 
 	public void findPort() {
@@ -42,13 +45,6 @@ public class SerialInterface {
 	public void connectToArduino() throws TooManyListenersException, PortInUseException {
 		String appName = null;
 
-		String PORT_NAMES[] = { "/dev/tty.usbmodem", // Mac OS X
-        "/dev/usbdev", // Linux
-       "/dev/tty", // Linux
-       "/dev/serial", // Linux
-       "COM3", // Windows
-		};
-
 		CommPortIdentifier portId = null;
 		Enumeration<?> portEnum = CommPortIdentifier.getPortIdentifiers();
 
@@ -59,7 +55,7 @@ public class SerialInterface {
 			//
 			CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
 			log.info("Versuche device " + currPortId.getName());
-			for (String portName : PORT_NAMES) {
+			for (String portName : ports) {
 				if (currPortId.getName().equals(portName) || currPortId.getName().startsWith(portName)) {
 
 					// Try to connect to the Arduino on this port
