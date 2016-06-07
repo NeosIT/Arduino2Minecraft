@@ -39,7 +39,14 @@ public class CommandDispatcher {
 				command = config.getCommandForArduinoValue(arduinoValue);
 
 			}
+			
 			log.info(arduinoValue + " --> " + command);
+			
+			if (null == command) {
+				command = arduinoValue;
+				log.info("Verwende den Wert vom Arduino " + arduinoValue + " als Befehl.");
+			}
+			
 			addCommand(command);
 		} catch (Exception e) {
 			log.warning(e.getMessage());
@@ -77,6 +84,12 @@ public class CommandDispatcher {
 				//Schreibe den Befehl in die command Variable
 				//und lösche den Befehl aus der Warteschlange
 				String command = queue.remove();
+				
+				// Verhindere einen Fehler durch einen Null-Wert
+				if (null == command) {
+					return;
+				}
+				
 				//Sende den Befehl an den Minecraft Server
 				Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
 			}
