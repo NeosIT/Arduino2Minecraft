@@ -11,8 +11,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 /**
  * Diese Klasse beschäftigt sich mit der Ausgabe der Lebensbalken an den
@@ -121,6 +123,33 @@ public class PlayerHealthListener implements Listener {
 		}
 	}
 
+	/**
+	 * Diese Methode wird aufgerufen, sobald der Spieler gestorben ist. Dann wird das Leben auf dem ArduinoBoard auf 0 gesetzt.
+	 * 
+	 * @param event
+	 */
+	@EventHandler
+	public void onPlayerDeath(PlayerDeathEvent event) {
+		Player player = event.getEntity();
+		if (player == activePlayer) {
+			displayPlayerHealth(player);
+		}
+	}
+	
+	/**
+	 * Diese Methode wird aufgerufen, sobald der Spieler respawned ist. Dann wird das Leben auf dem ArduinoBoard aktualisiert.
+	 * 
+	 * @param event
+	 */
+	@EventHandler
+	public void onPlayerRespawn(PlayerRespawnEvent event) {
+		Player player = event.getPlayer();
+		if (player == activePlayer) {
+			player.setHealth(player.getHealthScale());
+			displayPlayerHealth(player);
+		}
+	}
+	
 	/**
 	 * Diese Methode sendet das Signal mit dem Leben des Spielers an den
 	 * Arduino. Die 10 Minecraft Herzen werden auf 5 LEDs aufgeteilt, sodass
