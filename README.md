@@ -8,10 +8,11 @@ Das Plugin liegt unter plugins/Arduino2Minecraft/config.yml eine Konfigurationsd
 
 # Beispiel für Arduino -> Minecraft:
 
-Der Arduino sendet einen Befehl mit einem Linebreak, z. B. könnte der Arduino den Wert "knopf1\n" senden.
+Der Arduino sendet einen Befehl mit einem Linebreak, z. B. könnte der Arduino den Wert *knopf1\n* senden.
 
-In der Konfigurationsdatei muss am Ende die Zeile "arduino_[arduino_wert]: [mein_befehl]" eingefügt werden.
-Wenn der Spieler Player1 gekickt werden soll, sobald wenn der Arduino den Wert "knopf1\n" sendet, muss folgendes eingefügt werden:
-arduino_knopf1: kick Player1
+In der Konfigurationsdatei muss am Ende die Zeile *arduino_[arduino_wert]: [mein_befehl]* eingefügt werden.
+Wenn der Spieler Player1 gekickt werden soll, sobald der Arduino den Wert *knopf1\n* sendet, muss Folgendes eingefügt werden:
 
-Die Beispieldateien findest du im Ordner beispiel_knopf1
+    arduino_knopf1: kick Player1
+
+Die Beispieldateien findest Du im Ordner */beispiel_knopf1*
