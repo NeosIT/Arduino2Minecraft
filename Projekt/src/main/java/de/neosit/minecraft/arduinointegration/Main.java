@@ -43,6 +43,8 @@ public class Main extends JavaPlugin {
 		PlayerHealthListener playerHealthListener = new PlayerHealthListener(serial, getLogger());
 		pluginManager.registerEvents(playerHealthListener, this);
 		
+		getCommand(CommandListener.COMMAND).setExecutor(new CommandListener(serial));
+		
 		log.info("Plugin aktiviert!");	
 	}
 
