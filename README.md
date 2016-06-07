@@ -1,18 +1,17 @@
 Dieses Minecraft Spigot Server Plugin dient als Schnittstelle zwischen der Server Welt und dem Arduino.
-Die Kommunikation erfolgt seriell über das USB-Kabel. Die Befehle werden als String, welcher mit einem Zeilenumbruch(\n) endet, übertragen.
+Die Kommunikation erfolgt seriell Ã¼ber das USB-Kabel. Die Befehle werden als String, der mit einem Zeilenumbruch "\n" endet, Ã¼bertragen.
 
-Das Dokument minecraftInput.pdf skizziert, wie ein Ereignis beim Arduino zum Server übertragen werden und dort ein Ereignis ausgelöst wird.
-Das Dokument minecraftOutput.pdf zeigt, wie Informationen vom Server zum Arduino übertragen werden und dort ein Ereignis auslösen.
+Das Dokument minecraftInput.pdf skizziert, wie ein Ereignis beim Arduino zum Server Ã¼bertragen und dort ein Ereignis ausgelÃ¶st wird.
+Das Dokument minecraftOutput.pdf zeigt, wie Informationen vom Server zum Arduino Ã¼bertragen werden und dort ein Ereignis auslÃ¶sen.
 
-Das Plugin legt unter plugins/Arduino2Minecraft/config.yml eine Konfigurationsdatei an. Diese kann bearbeitet werden.
+Das Plugin liegt unter plugins/Arduino2Minecraft/config.yml eine Konfigurationsdatei an. Diese kann bearbeitet werden.
 
-#Beispiel für Arduino -> Minecraft:
+# Beispiel fÃ¼r Arduino -> Minecraft:
 
-Der Arduino sendet einen Befehl mit einem Linebreak.
-z.B. könnte der Arduino den Wert "knopf1\n"
+Der Arduino sendet einen Befehl mit einem Linebreak, z. B. kÃ¶nnte der Arduino den Wert "knopf1\n" senden.
 
-In der Konfigurationsdatei muss am Ende der Datei die Zeile "arduino_[arduino_wert]: [mein_befehl]" eingefügt werden.
-Wenn der Spieler Player1 gekickt werden soll, wenn der Arduino den Wert "knopf1\n" sendet, muss folgendes eingefügt werden:
+In der Konfigurationsdatei muss am Ende die Zeile "arduino_[arduino_wert]: [mein_befehl]" eingefÃ¼gt werden.
+Wenn der Spieler Player1 gekickt werden soll, sobald wenn der Arduino den Wert "knopf1\n" sendet, muss folgendes eingefÃ¼gt werden:
 arduino_knopf1: kick Player1
 
 Die Beispieldateien findest du im Ordner beispiel_knopf1
