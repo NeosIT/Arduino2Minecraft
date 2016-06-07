@@ -28,7 +28,7 @@ public class Main extends JavaPlugin {
 		CommandDispatcher command = new CommandDispatcher(config, getLogger());
 		command.register(this);
 		
-		serial = new SerialInterface(command, getLogger());
+		serial = new SerialInterface(command, getLogger(), config.getPorts());
 		
 		try {
 			serial.connectToArduino();
@@ -42,6 +42,8 @@ public class Main extends JavaPlugin {
 		
 		PlayerHealthListener playerHealthListener = new PlayerHealthListener(serial, getLogger());
 		pluginManager.registerEvents(playerHealthListener, this);
+		
+		getCommand(CommandListener.COMMAND).setExecutor(new CommandListener(serial));
 		
 		log.info("Plugin aktiviert!");	
 	}

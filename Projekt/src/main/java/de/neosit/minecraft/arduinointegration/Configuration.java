@@ -1,6 +1,7 @@
 package de.neosit.minecraft.arduinointegration;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -24,7 +25,7 @@ public class Configuration {
 	}
 	
 	public void setDefaults() {
-		config.addDefault(PORT, Arrays.asList("COM3"));
+		config.addDefault(PORT, Arrays.asList("/dev/tty.usbmodem", "/dev/usbdev", "/dev/tty", "/dev/serial", "COM3"));
 		config.addDefault(TIMEOUT, 1000);
 		config.addDefault(DATA_RATE, 9600);
 		config.addDefault(PERIOD, 4);
@@ -32,8 +33,8 @@ public class Configuration {
 		config.options().copyDefaults(true);
 	}
 	
-	public String getPort() {
-		return (String) config.get(PORT);
+	public List<String> getPorts() {
+		return (List<String>) config.getList(PORT);
 	}
 	
 	public int getTimeout() {
