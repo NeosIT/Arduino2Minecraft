@@ -14,7 +14,6 @@ public class Configuration {
 	public static final String TIMEOUT = "timeout";
 	public static final String DATA_RATE = "data_rate";
 	public static final String PERIOD = "period";
-	public static final String HEALTHBAR_PERIOD = "healthbar_period";
 	public static final String ARDUINO_PREFIX = "arduino_";
 	
 	private FileConfiguration config;
@@ -28,7 +27,6 @@ public class Configuration {
 		config.addDefault(TIMEOUT, 1000);
 		config.addDefault(DATA_RATE, 9600);
 		config.addDefault(PERIOD, 4);
-		config.addDefault(HEALTHBAR_PERIOD, 10);
 		config.options().copyDefaults(true);
 	}
 	
@@ -58,9 +56,5 @@ public class Configuration {
 	
 	public int getPeriod() {
 		return (int) config.getInt(PERIOD);
-	}
-	
-	public int getHealthbarPeriod() {
-		return (int) config.getInt(HEALTHBAR_PERIOD);
 	}
 }
