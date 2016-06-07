@@ -3,3 +3,7 @@ main: de.neosit.minecraft.arduinointegration.Main
 version: '1'
 author: the
 description: Integrate an Arduino to Minecraft
+commands:
+  sendToArduino:
+    description: Sende Daten zum Arduino
+    usage: /sendToArduino life 5
