@@ -1,12 +1,9 @@
 package de.neosit.minecraft.arduinointegration;
 
-import java.util.TooManyListenersException;
-import java.util.logging.Logger;
-
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import gnu.io.PortInUseException;
+import java.util.logging.Logger;
 /**
  * Hauptklasse zur Initialisierung des Plugin und dem Beenden des Plugin.
  *
@@ -18,12 +15,12 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onEnable() {
-		
+        System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM1");
+
 		//Konfiguration des Plugin laden
 		Configuration config = new Configuration(getConfig());
 		config.setDefaults();
 		saveConfig();
-		
 		
 		CommandDispatcher command = new CommandDispatcher(config, getLogger());
 		command.register(this);
@@ -32,10 +29,8 @@ public class Main extends JavaPlugin {
 		
 		try {
 			serial.connectToArduino();
-		} catch (TooManyListenersException e) {
-			log.warning(e.getMessage());
-		} catch (PortInUseException e) {
-			log.warning(e.getMessage());
+		} catch (Exception e) {
+			log.warning(e.getClass().getName() + ": " + e.getMessage());
 		}
 		
 		PluginManager pluginManager = getServer().getPluginManager();

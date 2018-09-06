@@ -33,13 +33,6 @@
 			<version>1.9.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
-		<!--Bukkit API -->
-		<dependency>
-			<groupId>org.bukkit</groupId>
-			<artifactId>bukkit</artifactId>
-			<version>1.9.4-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
-		</dependency>
 		<!-- RXTX for serial communication -->
 		<dependency>
 			<groupId>de.root1</groupId>
