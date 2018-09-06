@@ -18,10 +18,10 @@ Damit die Anwendung vernünftig unter Linux läuft und die USB Schnittstellen er
 
 Hier gilt es `/dev/ttyACM1` mit dem jeweils richtigen Port zu ersetzten. Diesen kann man beispielsweise in der Arduino IDE auslesen.
 
-Eine kompletter Befehl um den Server dann zu starten sieht wie folgt aus: 
+Eine kompletter Befehl um den Server dann zu starten sieht wie folgt aus:
 
 ```bash
-java -jar -d gnu.io.rxtx.SerialPorts=/dev/ttyACM1 spigot-1.9.4-R0.1-SNAPSHOT.jar
+java -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM1 -jar spigot-1.9.4-R0.1-SNAPSHOT.jar
 ```
 
 ### Hinweis für Fedora
