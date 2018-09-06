@@ -13,7 +13,7 @@ Das Plugin liegt unter plugins/Arduino2Minecraft/config.yml eine Konfigurationsd
 Damit die Anwendung vernünftig unter Linux läuft und die USB Schnittstellen erkennen kann ist es notwendig folgende Parameter beim Start des Servers mitzugeben:
 
 ```bash
--d gnu.io.rxtx.SerialPorts=/dev/ttyACM1
+-Dgnu.io.rxtx.SerialPorts=/dev/ttyACM1
 ```
 
 Hier gilt es `/dev/ttyACM1` mit dem jeweils richtigen Port zu ersetzten. Diesen kann man beispielsweise in der Arduino IDE auslesen.
