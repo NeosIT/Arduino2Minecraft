@@ -4,10 +4,10 @@ Eine Einführung in das Projekt kann [hier](http://azubi.neos-it.de/minecraft-ar
 
 ## Anforderungen
 
-* Java 7+
+* Java 8+
 * Maven
-* Minecraft 1.9.4
-* Spigot Minecraft Server `1.9.4-R0.1-SNAPSHOT`
+* Minecraft 1.13.1
+* Spigot Minecraft Server `1.13.1-R0.1-SNAPSHOT-b1893`
 * Arduino angeschlossen und [konfiguriert](http://azubi.neos-it.de/software-auf-arduino-uebertragen/)
 
 ## Setup
