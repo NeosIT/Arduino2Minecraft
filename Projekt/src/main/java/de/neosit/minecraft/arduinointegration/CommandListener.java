@@ -1,31 +1,49 @@
 package de.neosit.minecraft.arduinointegration;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.StringUtil;
 
-import com.google.common.base.Objects;
+import java.util.logging.Logger;
 
-public class CommandListener implements CommandExecutor{
-	public static final String COMMAND = "sendToArduino";
-	
-	// Serielle Schnittstelle für den Arduino
-	private SerialInterface serialInterface;
-	
-	public CommandListener(SerialInterface serialInterface) {
-		this.serialInterface = serialInterface;
-	}
+public class CommandListener implements CommandExecutor {
+    public static final String ARDUINO = "arduino";
 
-	public boolean onCommand(CommandSender arg0, Command arg1, String arg2, String[] arg3) {
-		if (COMMAND.equalsIgnoreCase(arg2) == false) {
-			return false;
-		}
-		
-		String message = StringUtils.join(arg3, " ");
-		serialInterface.sendData(message);
-		return true;
-	}
+    // Serielle Schnittstelle für den Arduino
+    private Main main;
+    private Logger log;
 
+    private CommandListener(Main main, Logger log) {
+        this.main = main;
+        this.log = log;
+    }
+
+    public static void installCommands(Main main, Logger log) {
+        CommandListener commandListener = new CommandListener(main, log);
+
+        main.getCommand(ARDUINO).setExecutor(commandListener);
+    }
+
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (args.length == 0) {
+            return false;
+        }
+
+        switch (args[0]) {
+            case "send":
+                String message = StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " ");
+                main.getSerial().sendData(message);
+                return true;
+            case "reload":
+                if (args.length == 2 && args[1].equals("config")) {
+                    main.reloadConfig();
+                    return true;
+                }
+                return false;
+            default:
+                return false;
+        }
+    }
 }

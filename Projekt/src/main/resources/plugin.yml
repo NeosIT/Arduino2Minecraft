@@ -1,9 +1,15 @@
 name: ArduinoIntegration
 main: de.neosit.minecraft.arduinointegration.Main
 version: '1'
-author: the
+author: tobias.hellman@neos-it.de, meikel.philipp@neos-it.de
 description: Integrate an Arduino to Minecraft
 commands:
-  sendToArduino:
+  arduino:
+    description:
+    usage: use /help Arduino2Minecraft to see all available commands
+  arduino send:
     description: Sende Daten zum Arduino
-    usage: /sendToArduino life 5
+    usage: /arduino send life 5
+  arduino reload config:
+    description: Lade die Konfigurationsdatei neu
+    usage: /arduino reload config

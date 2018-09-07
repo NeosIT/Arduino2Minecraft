@@ -12,15 +12,16 @@ public class Main extends JavaPlugin {
 	private Logger log = getLogger();
 
 	private SerialInterface serial;
+	private Configuration config;
 	
 	@Override
 	public void onEnable() {
         System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM1");
 
-		//Konfiguration des Plugin laden
-		Configuration config = new Configuration(getConfig());
-		config.setDefaults();
-		saveConfig();
+        //Konfiguration des Plugin laden
+        config = new Configuration(getConfig());
+        config.setDefaults();
+        saveConfig();
 		
 		CommandDispatcher command = new CommandDispatcher(config, getLogger());
 		command.register(this);
@@ -37,9 +38,9 @@ public class Main extends JavaPlugin {
 		
 		PlayerHealthListener playerHealthListener = new PlayerHealthListener(serial, getLogger());
 		pluginManager.registerEvents(playerHealthListener, this);
-		
-		getCommand(CommandListener.COMMAND).setExecutor(new CommandListener(serial));
-		
+
+        CommandListener.installCommands(this, log);
+
 		log.info("Plugin aktiviert!");	
 	}
 
@@ -48,4 +49,8 @@ public class Main extends JavaPlugin {
 		serial.closeConnection();
 		log.info("Plugin deaktiviert!");
 	}
+
+    public SerialInterface getSerial() {
+        return serial;
+    }
 }
