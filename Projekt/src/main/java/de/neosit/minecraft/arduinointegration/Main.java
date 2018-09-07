@@ -17,8 +17,6 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM1");
-
         //Konfiguration des Plugin laden
         config = new Configuration(getConfig());
         config.setDefaults();
