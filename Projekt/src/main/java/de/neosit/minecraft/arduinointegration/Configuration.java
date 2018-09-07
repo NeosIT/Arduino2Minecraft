@@ -30,6 +30,10 @@ public class Configuration {
 		config.addDefault(PERIOD, 4);
 		config.options().copyDefaults(true);
 	}
+
+	public void reload(FileConfiguration config){
+		this.config = config;
+	}
 	
 	public List<String> getPorts() {
 		return (List<String>) config.getList(PORT);

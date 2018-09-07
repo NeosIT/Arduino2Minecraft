@@ -5,11 +5,5 @@ author: tobias.hellman@neos-it.de, meikel.philipp@neos-it.de
 description: Integrate an Arduino to Minecraft
 commands:
   arduino:
-    description:
-    usage: use /help Arduino2Minecraft to see all available commands
-  arduino send:
-    description: Sende Daten zum Arduino
-    usage: /arduino send life 5
-  arduino reload config:
-    description: Lade die Konfigurationsdatei neu
-    usage: /arduino reload config
+    description: Commands to control the plugin or the arduino itself
+    aliases: ["arduino --help", "arduino -h", "arduino ?"]
