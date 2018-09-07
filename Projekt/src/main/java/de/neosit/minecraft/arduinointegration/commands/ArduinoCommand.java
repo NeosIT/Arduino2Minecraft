@@ -30,7 +30,7 @@ public class ArduinoCommand implements CommandExecutor {
             switch (args[0]) {
                 case "send":
                     if (args.length == 1) {
-                        sender.sendMessage("Use " + ChatColor.BLUE + "/arduino send [ARGS]" + ChatColor.RESET + " to send a message to the arduino.");
+                        sender.sendMessage(main.getCommand("arduino send").getDescription());
                         return true;
                     }
                     String message = StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " ");
@@ -38,11 +38,7 @@ public class ArduinoCommand implements CommandExecutor {
                     return true;
                 case "reload":
                     if (args.length == 1) {
-                        sender.sendMessage(
-                                "Use " + ChatColor.BLUE + "/arduino reload [CONFIG]" + ChatColor.RESET + " to reload a specific configuration file of this plugin.\n" +
-                                        "Available configration files are:\n" +
-                                        ChatColor.BLUE + "config"
-                        );
+                        sender.sendMessage(main.getCommand("arduino reload").getDescription());
                         return true;
                     }
                     if (args.length == 2 && args[1].equals("config")) {

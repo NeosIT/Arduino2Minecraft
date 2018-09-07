@@ -7,3 +7,10 @@ commands:
   arduino:
     description: Commands to control the plugin or the arduino itself
     aliases: ["arduino --help", "arduino -h", "arduino ?"]
+  arduino send:
+    description: Use §9/arduino send [ARGS]§r to send a message to the arduino.
+  arduino reload:
+    description: |
+      Use §9/arduino reload [CONFIG]§r to reload a specific configuration file of this plugin.
+      Available configration files are:
+      §9config
