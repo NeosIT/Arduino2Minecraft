@@ -19,7 +19,7 @@ Damit das Projekt gestartet werden kann muss folgendes getan werden:
     cd Projekt
     mvn package
     ```
-2. Danach die JAR Datei `*-with-dependencies.jar` (im Ordner `target`) in den Plugins Ordner vom Spigot Server verschieben.
+2. Danach die JAR Datei `*-jar-with-dependencies` (im Ordner `target`) in den Plugins Ordner vom Spigot Server verschieben.
 3. Den Code von `Arduino/code.ino` auf den Arduino kopieren (via Arduino IDE) - wenn noch nicht getan.
 4. Den Spigot Server starten
     ```bash
