@@ -24,7 +24,7 @@ Damit das Projekt gestartet werden kann muss folgendes getan werden:
 4. Den Spigot Server starten
     ```bash
     cd MC_SERVER_DIR
-    java -jar spigot-1.9.4-R0.1-SNAPSHOT.jar
+    java -jar spigot-1.13.1-R0.1-SNAPSHOT-b1893.jar
     ```
 
 ## Hinweis für Linux Nutzer
@@ -40,7 +40,7 @@ Hier gilt es `/dev/ttyACM1` mit dem jeweils richtigen Port zu ersetzten. Diesen 
 Eine kompletter Befehl um den Server dann zu starten sieht wie folgt aus:
 
 ```bash
-java -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM1 -jar spigot-1.9.4-R0.1-SNAPSHOT.jar
+java -Dgnu.io.rxtx.SerialPorts=/dev/ttyACM1 -jar spigot-1.13.1-R0.1-SNAPSHOT-b1893.jar
 ```
 
 ### Hinweis für Fedora
