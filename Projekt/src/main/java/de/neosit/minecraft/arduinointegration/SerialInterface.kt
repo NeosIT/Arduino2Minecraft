@@ -24,11 +24,12 @@ class SerialInterface(private val command: CommandDispatcher, private val log: L
 
         while (portIdentifiers.hasMoreElements()) {
             val portIdentifier = portIdentifiers.nextElement() as CommPortIdentifier
-            log.info("Port available: " + portIdentifier.name)
 
             if (ports.contains(portIdentifier.name)) {
                 log.info("Port available and in config: " + portIdentifier.name)
                 availablePortNames.add(portIdentifier.name)
+            } else {
+                log.info("Port available but not in config: " + portIdentifier.name)
             }
         }
 
