@@ -41,7 +41,7 @@ void sendCommand(String command) {
   
 void checkPotVal(int pin) {
   int val = map(analogRead(pin), 0, 1023, 0, 24);
-  if(abs(val - potValue) &gt; 1){
+  if(abs(val - potValue) > 1){
     //Serial.println(val * 1000);
     String r = String(val * 1000);
     sendCommand("poti:" + r);
@@ -102,7 +102,7 @@ void loop() {
   } else {
     digitalWrite(ledBlinkPin, LOW);
   }
-  if(enableFinal &amp;&amp; buttonPressed(finalButton)) {
+  if(enableFinal && buttonPressed(finalButton)) {
     beep("LOW");
     sendCommand("finalButton");
   }
